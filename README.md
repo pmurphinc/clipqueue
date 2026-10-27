@@ -15,6 +15,30 @@ Turn a folder of old video clips into a YouTube posting schedule. ClipQueue runs
 3. **Suggests titles, descriptions, hashtags and tags** in that style. It works offline, and can optionally use your local [Claude Code](https://claude.com/claude-code) CLI with your own plan.
 4. **Schedules uploads.** Clips upload a few hours or days ahead as private with a publish time, so YouTube makes them public on schedule even if ClipQueue is closed by then.
 
+## Before you start
+
+**Setup takes about 20–30 minutes:**
+
+- **About 5–10 minutes** to install Python, ffmpeg (optional but recommended), and ClipQueue.
+- **About 10–15 minutes** to connect YouTube. You create your own free Google Cloud project, and the app walks you through it step by step. Google will warn that the app is "unverified." That's normal, because you're the developer of your own copy.
+
+**What to expect:**
+
+- **YouTube only.** No TikTok or Instagram.
+- **About 5 uploads a day**, because of YouTube's free API limits.
+- **Reconnect every 7 days**, unless you follow [the step in the setup guide](docs/setup-youtube.md#sign-in-expired-after-a-week) that stops this.
+- **Uploads may end up private.** Google sometimes forces uploads from personal projects to private. If that happens, ClipQueue tells you and you publish them by hand in YouTube Studio.
+- **Open it now and then.** ClipQueue needs to be running to upload clips before their scheduled time. YouTube publishes them on time even if it's closed by then.
+- **Early version.** Expect rough edges, and please [report bugs](https://github.com/pmurphinc/clipqueue/issues).
+
+## Let an AI coding agent set it up
+
+If you use [Claude Code](https://claude.com/claude-code), Codex, or a similar coding agent, you can skip the manual install. Give it the repo URL and ask it to set ClipQueue up:
+
+> Set up https://github.com/pmurphinc/clipqueue on my computer and start it.
+
+It can install Python and ffmpeg, install ClipQueue, and launch it. You'll still do the Google Cloud and YouTube sign-in steps yourself in your browser, because they need your Google account.
+
 ## Quick start
 
 You need **Python 3.11+**. **ffmpeg** is strongly recommended, for clip length, shape and thumbnails.
@@ -35,7 +59,7 @@ pip install -e .
 clipqueue
 ```
 
-Your browser opens to `http://127.0.0.1:8765` and the setup wizard walks you through the rest. Connecting YouTube takes about 5 minutes; see [docs/setup-youtube.md](docs/setup-youtube.md).
+Your browser opens to `http://127.0.0.1:8765` and the setup wizard walks you through the rest. Connecting YouTube takes about 10–15 minutes; see [docs/setup-youtube.md](docs/setup-youtube.md).
 
 Installing ffmpeg: `winget install Gyan.FFmpeg` (Windows), `brew install ffmpeg` (macOS), or `sudo apt install ffmpeg` (Debian/Ubuntu).
 

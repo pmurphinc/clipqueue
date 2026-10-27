@@ -3,7 +3,7 @@
 <form method="post" action="/youtube/disconnect"><button class="btn ghost small">Disconnect</button></form>
 {% else %}
 {% if auth_error %}<div class="flash bad">{{ auth_error }}</div>{% endif %}
-<p>ClipQueue uploads with <strong>your own</strong> Google API credentials, so your uploads never pass through anyone else's servers. It's a one-time setup, about 5 minutes.</p>
+<p>ClipQueue uploads with <strong>your own</strong> Google API credentials, so your uploads never pass through anyone else's servers. It's a one-time setup, about 10–15 minutes.</p>
 
 <details class="guide" {% if not has_secret %}open{% endif %}>
   <summary><strong>Step A:</strong> Create your Google OAuth client {% if has_secret %}<span class="ok-text">✓ done</span>{% endif %}</summary>

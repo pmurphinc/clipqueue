@@ -1,6 +1,6 @@
 # Connecting YouTube
 
-ClipQueue uploads with **your own** Google Cloud OAuth client. This is standard for self-hosted YouTube tools: no shared app, no middleman, and your quota is yours. It takes about 5 minutes and is free.
+ClipQueue uploads with **your own** Google Cloud OAuth client. This is standard for self-hosted YouTube tools: no shared app, no middleman, and your quota is yours. It takes about 10–15 minutes and is free.
 
 ## 1. Create a Google Cloud project
 
