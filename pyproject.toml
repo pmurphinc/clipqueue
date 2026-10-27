@@ -1,0 +1,15 @@
+[project]
+name = "clipqueue"
+version = "0.0.1"
+description = "Local-first tool to prep and schedule video clips for YouTube."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+clipqueue = "clipqueue.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
