@@ -1,0 +1,11 @@
+{% extends "setup_base.html" %}
+{% block step %}
+<h1>Connect YouTube</h1>
+{% set back_url = "/setup/youtube" %}
+{% include "_youtube_panel.html" %}
+<div class="actions">
+  <a class="btn ghost" href="/setup/{{ prev_step }}">Back</a>
+  <a class="btn primary" href="/setup/{{ next_step }}">{{ 'Next' if connected else 'Skip for now' }}</a>
+</div>
+{% if not connected %}<p class="muted small right">You can prepare and schedule clips without connecting. They'll upload once you connect.</p>{% endif %}
+{% endblock %}

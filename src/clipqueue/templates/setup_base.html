@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Setup · ClipQueue{% endblock %}
+{% block main_class %}narrow{% endblock %}
+{% block content %}
+<ol class="steps">
+  {% for key, label in steps %}
+  <li class="{% if loop.index0 < step_index %}done{% elif loop.index0 == step_index %}current{% endif %}">
+    <a href="/setup/{{ key }}">{{ label }}</a>
+  </li>
+  {% endfor %}
+</ol>
+<section class="card">
+  {% block step %}{% endblock %}
+</section>
+{% endblock %}

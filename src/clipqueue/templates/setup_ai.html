@@ -1,0 +1,6 @@
+{% extends "setup_base.html" %}
+{% block step %}
+<h1>AI suggestions (optional)</h1>
+{% set next_url = "/setup/done" %}
+{% include "_ai_form.html" %}
+{% endblock %}

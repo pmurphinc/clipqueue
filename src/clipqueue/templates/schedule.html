@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Schedule · ClipQueue{% endblock %}
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1>Schedule</h1>
+    <p class="muted small" id="uploader-msg">{{ uploader.message }}</p>
+  </div>
+  <button class="btn ghost" id="run-now" type="button">Check for uploads now</button>
+</div>
+{% if not connected %}<div class="flash warn">YouTube isn't connected, so nothing will upload yet. <a href="/settings#youtube">Connect it</a>.</div>{% endif %}
+
+<h2>Coming up <span class="count">{{ queued | length }}</span></h2>
+{% if queued %}
+<table class="list">
+  <thead><tr><th>When</th><th></th><th>Title</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for c in queued %}
+  <tr>
+    <td class="nowrap">{{ c.scheduled_at | when }}</td>
+    <td><img class="mini" loading="lazy" src="/thumb/{{ c.id }}" alt=""></td>
+    <td><a href="/clip/{{ c.id }}">{{ c.title or c.filename }}</a>{% if is_short(c) %} <span class="badge short inline-badge">Short</span>{% endif %}</td>
+    <td><span class="status s-{{ c.status }}">{{ c.status }}</span>
+      {% if c.status == 'uploading' %}<span class="small" id="pct"></span>{% endif %}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">Nothing scheduled. Open a clip or use <a href="/queue">Auto-schedule</a>.</p>
+{% endif %}
+
+{% if failed %}
+<h2>Failed <span class="count">{{ failed | length }}</span></h2>
+<table class="list">
+  <tbody>
+  {% for c in failed %}
+  <tr>
+    <td><a href="/clip/{{ c.id }}">{{ c.title or c.filename }}</a><div class="small bad-text">{{ c.error }}</div></td>
+    <td class="right"><form method="post" action="/clip/{{ c.id }}/retry"><button class="btn small">Retry</button></form></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<h2>Posted <span class="count">{{ uploaded | length }}</span></h2>
+{% if uploaded %}
+<table class="list">
+  <thead><tr><th>Goes live</th><th>Title</th><th>Result</th><th></th></tr></thead>
+  <tbody>
+  {% for c in uploaded %}
+  <tr>
+    <td class="nowrap">{{ c.scheduled_at | when }}</td>
+    <td><a href="/clip/{{ c.id }}">{{ c.title }}</a></td>
+    <td class="small">{{ c.youtube_status }}</td>
+    <td class="right"><a href="https://studio.youtube.com/video/{{ c.youtube_id }}/edit" target="_blank" rel="noopener">Studio ↗</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">Nothing posted yet.</p>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script>ClipQueue.schedulePage();</script>{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "setup_base.html" %}
+{% block step %}
+<h1>Welcome to ClipQueue</h1>
+<p class="lead">ClipQueue turns a folder of video clips into a YouTube posting schedule. Setup takes about 10 minutes. Everything stays on this computer.</p>
+
+<h2>Quick checks</h2>
+<ul class="checks">
+  {% for c in checks %}
+  <li class="{{ 'ok' if c.ok else ('bad' if c.required else 'warn') }}">
+    <span class="dot"></span>
+    <div>
+      <strong>{{ c.name }}</strong> <span class="muted">{{ c.detail }}</span>
+      {% if c.why and not c.ok %}<div class="muted small">{{ c.why }}</div>{% endif %}
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+<p class="muted small">Installed something? <a href="/setup/checks">Check again</a> (restart ClipQueue if it still isn't found).</p>
+
+<div class="actions"><a class="btn primary" href="/setup/{{ next_step }}">Next</a></div>
+{% endblock %}

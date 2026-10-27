@@ -1,0 +1,17 @@
+<form method="post" action="/setup/folder" class="stack">
+  <input type="hidden" name="back" value="{{ back_url }}">
+  <label>Clip folder
+    <input name="folder" value="{{ settings.clip_folder }}" placeholder="{{ home }}{{ '\\' if '\\' in home else '/' }}Videos{{ '\\' if '\\' in home else '/' }}Clips" required>
+  </label>
+  <p class="muted small">Paste the full path. Tip: in your file manager, copy the folder's path from the address bar. Subfolders are included.</p>
+  <div><button class="btn">{{ 'Scan again' if settings.clip_folder else 'Scan folder' }}</button></div>
+</form>
+
+<div id="scan-status" class="scan {{ 'running' if scan.running else '' }}" data-poll="{{ 1 if scan.running else 0 }}">
+  <div class="bar"><span style="width: {{ (100 * scan.done / scan.total) if scan.total else 0 }}%"></span></div>
+  <div class="small"><span class="scan-msg">{{ scan.message }}</span></div>
+</div>
+
+{% if counts.all %}
+<p class="small"><strong>{{ counts.all }}</strong> clips in your library.</p>
+{% endif %}

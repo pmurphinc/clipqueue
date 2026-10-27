@@ -12,6 +12,7 @@ build/
 .env
 *.env
 data/
+.dev-data/
 secrets/
 client_secret*.json
 token*.json

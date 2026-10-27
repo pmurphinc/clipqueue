@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Ready · ClipQueue{% endblock %}
+{% block main_class %}narrow{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>You're set up</h1>
+  <p class="lead">{{ counts.all }} clips are ready to go. Here's how to use ClipQueue:</p>
+  <ol>
+    <li><strong>Clips</strong>: open any clip, click <em>Suggest</em> for titles and hashtags, then schedule it.</li>
+    <li>Or use <strong>Auto-schedule</strong> on the Clips page to fill the next several slots at once. You can review everything before it uploads.</li>
+    <li><strong>Schedule</strong> shows what's coming up and what's been posted.</li>
+  </ol>
+  <p class="muted small">Leave ClipQueue running (or open it now and then) so it can upload clips before their slot.</p>
+  <div class="actions"><a class="btn primary" href="/queue">Go to my clips</a></div>
+</section>
+{% endblock %}

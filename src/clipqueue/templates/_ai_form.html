@@ -1,0 +1,19 @@
+{% if claude_path %}
+<form method="post" action="/setup/ai" class="stack">
+  <input type="hidden" name="next" value="{{ next_url }}">
+  <p>Found the <code>claude</code> CLI on this computer. If you turn this on, ClipQueue sends your interview answers and each clip's file name to Claude when you ask for suggestions. It uses your own Claude plan, and nothing goes through ClipQueue.</p>
+  <label class="radio"><input type="checkbox" name="ai_enabled" {% if settings.ai_enabled %}checked{% endif %}> Use Claude for title suggestions by default</label>
+  <p class="muted small">Offline suggestions are always available, and are used if Claude fails.</p>
+  <div class="actions">
+    {% if prev_step %}<a class="btn ghost" href="/setup/{{ prev_step }}">Back</a>{% endif %}
+    <button class="btn primary">{{ submit_label or 'Finish setup' }}</button>
+  </div>
+</form>
+{% else %}
+<p>The <code>claude</code> CLI isn't installed, so ClipQueue uses its built-in offline suggestions. That works fine; AI is optional.</p>
+<p class="muted small">If you have a Claude plan and want AI suggestions, install Claude Code, then restart ClipQueue.</p>
+{% if next_url %}<div class="actions">
+  {% if prev_step %}<a class="btn ghost" href="/setup/{{ prev_step }}">Back</a>{% endif %}
+  <a class="btn primary" href="{{ next_url }}">Finish setup</a>
+</div>{% endif %}
+{% endif %}

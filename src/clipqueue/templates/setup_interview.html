@@ -1,0 +1,7 @@
+{% extends "setup_base.html" %}
+{% block step %}
+<h1>Tell us about your content</h1>
+<p class="lead">Eight quick questions. Your answers shape the titles and hashtags ClipQueue suggests. Skip anything you like; you can change it later in Settings.</p>
+{% set next_url = "/setup/" ~ next_step %}
+{% include "_interview_form.html" %}
+{% endblock %}

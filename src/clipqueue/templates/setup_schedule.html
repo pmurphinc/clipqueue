@@ -1,0 +1,7 @@
+{% extends "setup_base.html" %}
+{% block step %}
+<h1>How often do you want to post?</h1>
+<p class="lead">ClipQueue fills these slots when you schedule clips.</p>
+{% set next_url = "/setup/" ~ next_step %}
+{% include "_schedule_form.html" %}
+{% endblock %}

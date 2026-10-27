@@ -1,0 +1,32 @@
+{% if connected and channel %}
+<div class="flash ok">Connected to <strong>{{ channel.title }}</strong>.</div>
+<form method="post" action="/youtube/disconnect"><button class="btn ghost small">Disconnect</button></form>
+{% else %}
+{% if auth_error %}<div class="flash bad">{{ auth_error }}</div>{% endif %}
+<p>ClipQueue uploads with <strong>your own</strong> Google API credentials, so your uploads never pass through anyone else's servers. It's a one-time setup, about 5 minutes.</p>
+
+<details class="guide" {% if not has_secret %}open{% endif %}>
+  <summary><strong>Step A:</strong> Create your Google OAuth client {% if has_secret %}<span class="ok-text">✓ done</span>{% endif %}</summary>
+  <ol>
+    <li>Open <a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener">Google Cloud Console</a> and create a project (any name).</li>
+    <li>Enable the <a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener">YouTube Data API v3</a> for that project.</li>
+    <li>Open <a href="https://console.cloud.google.com/auth/overview" target="_blank" rel="noopener">Google Auth Platform</a>, click <em>Get started</em>, choose <em>External</em>, and fill in the app name and your email.</li>
+    <li>Under <em>Audience</em>, add your own Google account as a <em>test user</em>.</li>
+    <li>Under <em>Clients</em>, create a client with application type <strong>Desktop app</strong>, then download its JSON file.</li>
+  </ol>
+  <form method="post" action="/youtube/client-secret" enctype="multipart/form-data" class="inline">
+    <input type="hidden" name="back" value="{{ back_url }}">
+    <input type="file" name="file" accept=".json,application/json" required>
+    <button class="btn">Add client file</button>
+  </form>
+  <p class="muted small">Saved only in your ClipQueue data folder. Full guide with troubleshooting: docs/setup-youtube.md.</p>
+</details>
+
+<details class="guide" {% if has_secret %}open{% endif %}>
+  <summary><strong>Step B:</strong> Connect your channel</summary>
+  <p>Google will warn that the app isn't verified. That's expected: it's <em>your</em> app. Click <em>Continue</em>.</p>
+  <form method="post" action="/youtube/connect">
+    <button class="btn primary" {% if not has_secret %}disabled{% endif %}>Connect YouTube</button>
+  </form>
+</details>
+{% endif %}

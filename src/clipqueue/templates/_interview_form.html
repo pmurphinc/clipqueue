@@ -1,0 +1,73 @@
+<form method="post" action="/setup/interview" class="stack interview">
+  <input type="hidden" name="next" value="{{ next_url }}">
+
+  <fieldset>
+    <legend>1. What kind of clips are these?</legend>
+    <div class="chips">
+      {% for key, (label, _) in content_types.items() %}
+      <label class="chip"><input type="radio" name="content_type" value="{{ key }}" {% if profile.content_type == key %}checked{% endif %}> {{ label }}</label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <label>2. Specific games, show, or topics
+    <input name="specifics" value="{{ profile.specifics }}" placeholder="e.g. Valorant, Rocket League">
+    <span class="muted small">Comma-separated. Used for titles, tags, and hashtags. The first one is the default topic.</span>
+  </label>
+
+  <label>3. Who's watching?
+    <input name="audience" value="{{ profile.audience }}" placeholder="e.g. competitive players, casual fans, beginners">
+  </label>
+
+  <fieldset>
+    <legend>4. Tone <span class="muted small">(pick up to 2)</span></legend>
+    <div class="chips" data-max="2">
+      {% for key, label in tones.items() %}
+      <label class="chip"><input type="checkbox" name="tones" value="{{ key }}" {% if key in profile.tones %}checked{% endif %}> {{ label }}</label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>5. Title style</legend>
+    <div class="chips">
+      {% for key, (label, example) in title_styles.items() %}
+      <label class="chip tall"><input type="radio" name="title_style" value="{{ key }}" {% if profile.title_style == key %}checked{% endif %}>
+        <span>{{ label }}<br><em class="muted small">{{ example }}</em></span></label>
+      {% endfor %}
+    </div>
+    <div class="inline">
+      <span>Emoji:</span>
+      {% for key, label in emoji_levels.items() %}
+      <label class="chip"><input type="radio" name="emoji" value="{{ key }}" {% if profile.emoji == key %}checked{% endif %}> {{ label }}</label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <label>6. Paste 2–5 titles you like <span class="muted small">(yours or anyone's, one per line)</span>
+    <textarea name="example_titles" rows="4" placeholder="One per line">{{ profile.example_titles }}</textarea>
+  </label>
+
+  <div class="grid2">
+    <label>7. Hashtags to always include
+      <input name="always_tags" value="{{ profile.always_tags }}" placeholder="#yourchannel #valorant">
+    </label>
+    <label>Hashtags to never use
+      <input name="never_tags" value="{{ profile.never_tags }}" placeholder="#fyp">
+    </label>
+  </div>
+
+  <div class="grid2">
+    <label>8. Channel name
+      <input name="channel_name" value="{{ profile.channel_name }}">
+    </label>
+    <label>Call to action <span class="muted small">(added to descriptions)</span>
+      <input name="cta" value="{{ profile.cta }}" placeholder="Subscribe for a clip every day">
+    </label>
+  </div>
+
+  <div class="actions">
+    {% if prev_step %}<a class="btn ghost" href="/setup/{{ prev_step }}">Back</a>{% endif %}
+    <button class="btn primary">{{ submit_label or 'Save and continue' }}</button>
+  </div>
+</form>

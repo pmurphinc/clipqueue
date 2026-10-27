@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ClipQueue{% endblock %}</title>
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><img src="/static/icon.svg" alt="" width="22" height="22"> ClipQueue</a>
+    {% if settings.setup_complete %}
+    <nav>
+      <a href="/queue" {% if request.url.path.startswith('/queue') or request.url.path.startswith('/clip') %}class="active"{% endif %}>Clips</a>
+      <a href="/schedule" {% if request.url.path.startswith('/schedule') %}class="active"{% endif %}>Schedule</a>
+      <a href="/settings" {% if request.url.path.startswith('/settings') %}class="active"{% endif %}>Settings</a>
+    </nav>
+    {% endif %}
+  </header>
+  <main class="{% block main_class %}{% endblock %}">
+    {% if msg %}<div class="flash ok">{{ msg }}</div>{% endif %}
+    {% if err %}<div class="flash bad">{{ err }}</div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="foot">ClipQueue {{ version }} · runs only on this computer</footer>
+  <script src="/static/app.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

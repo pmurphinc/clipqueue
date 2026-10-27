@@ -1,0 +1,11 @@
+{% extends "setup_base.html" %}
+{% block step %}
+<h1>Where are your clips?</h1>
+<p class="lead">Pick the folder with the videos you want to post. ClipQueue only reads it; it never moves, renames, or edits your files.</p>
+{% set back_url = "/setup/folder" %}
+{% include "_folder_form.html" %}
+<div class="actions">
+  <a class="btn ghost" href="/setup/{{ prev_step }}">Back</a>
+  <a class="btn primary" href="/setup/{{ next_step }}">Next</a>
+</div>
+{% endblock %}

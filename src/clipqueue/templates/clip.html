@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}{{ clip.title or clip.filename }} · ClipQueue{% endblock %}
+{% block content %}
+<p class="small"><a href="/queue">← All clips</a></p>
+<div class="editor">
+  <div class="player-col">
+    {% if exists %}
+    <video class="{{ 'vertical' if short else '' }}" src="/media/{{ clip.id }}" controls preload="metadata"></video>
+    {% else %}
+    <div class="flash bad">This file is no longer on disk.</div>
+    {% endif %}
+    <dl class="facts">
+      <dt>File</dt><dd class="break">{{ clip.filename }}</dd>
+      <dt>Folder</dt><dd>{{ clip.folder }}</dd>
+      <dt>Length</dt><dd>{{ clip.duration | dur }}</dd>
+      <dt>Size</dt><dd>{% if clip.width %}{{ clip.width }}×{{ clip.height }}{% else %}?{% endif %}</dd>
+      <dt>Type</dt><dd>{{ 'YouTube Short' if short else 'Regular video' }}</dd>
+      <dt>Status</dt><dd><span class="status s-{{ clip.status }}">{{ clip.status }}</span></dd>
+      {% if clip.scheduled_at and clip.status in ('queued','uploading','uploaded') %}<dt>When</dt><dd>{{ clip.scheduled_at | when }}</dd>{% endif %}
+    </dl>
+    {% if clip.youtube_id %}
+    <p><a class="btn" href="https://studio.youtube.com/video/{{ clip.youtube_id }}/edit" target="_blank" rel="noopener">Open in YouTube Studio</a></p>
+    {% if clip.youtube_status %}<p class="small">{{ clip.youtube_status }}</p>{% endif %}
+    {% endif %}
+    {% if clip.error %}<div class="flash bad">{{ clip.error }}</div>{% endif %}
+    {% if clip.status == 'uploading' %}
+    <div class="scan running" id="upload-status" data-clip="{{ clip.id }}">
+      <div class="bar"><span style="width: {{ (uploader.progress * 100) | round }}%"></span></div>
+      <div class="small">Uploading…</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="form-col">
+    {% set locked = clip.status in ('uploading', 'uploaded') %}
+    <form method="post" action="/clip/{{ clip.id }}" class="stack" id="clip-form">
+      <fieldset {% if locked %}disabled{% endif %} class="plain">
+      <label>Note for suggestions <span class="muted small">(optional: what happens in this clip? Goes in the description too)</span>
+        <input name="note" value="{{ clip.note }}" placeholder="e.g. 1v4 clutch with a pistol on Ascent">
+      </label>
+
+      <div class="suggest-bar">
+        <button type="button" class="btn" id="suggest" data-ai="0">Suggest titles</button>
+        {% if ai_available %}<button type="button" class="btn" id="suggest-ai" data-ai="1">Suggest with Claude</button>{% endif %}
+        <span class="muted small" id="suggest-note"></span>
+      </div>
+      <div id="options" class="options"></div>
+
+      <label>Title <span class="muted small"><span id="title-count">{{ clip.title | length }}</span>/100</span>
+        <input name="title" id="title" maxlength="100" value="{{ clip.title }}">
+      </label>
+      <label>Description
+        <textarea name="description" id="description" rows="5">{{ clip.description }}</textarea>
+      </label>
+      <label>Tags <span class="muted small">(comma-separated search keywords, not shown to viewers)</span>
+        <input name="tags" id="tags" value="{{ clip.tags }}">
+      </label>
+      </fieldset>
+
+      {% if not locked %}
+      <div class="actions wrap">
+        <button class="btn" name="action" value="save">Save draft</button>
+        {% if clip.status == 'queued' %}
+          <button class="btn" name="action" value="unqueue">Unschedule</button>
+        {% else %}
+          <button class="btn primary" name="action" value="queue_next" {% if not next_slot %}disabled title="Set posting days and times in Settings"{% endif %}>
+            Schedule for next slot{% if next_slot %} ({{ next_slot | when }}){% endif %}</button>
+        {% endif %}
+        <details class="pop">
+          <summary class="btn">Pick a time…</summary>
+          <div class="popbody stack">
+            <input type="datetime-local" name="when">
+            <button class="btn primary" name="action" value="queue_at">Schedule</button>
+          </div>
+        </details>
+        <button class="btn" name="action" value="upload_now" data-confirm="Upload this clip to YouTube now? {{ 'It will stay private.' if settings.publish_mode == 'private' else 'It will be public right away.' }}">Upload now</button>
+        {% if clip.status == 'skipped' %}
+          <button class="btn ghost" name="action" value="unskip">Un-skip</button>
+        {% else %}
+          <button class="btn ghost" name="action" value="skip">Skip clip</button>
+        {% endif %}
+      </div>
+      {% endif %}
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script>ClipQueue.editor({{ clip.id }});</script>{% endblock %}

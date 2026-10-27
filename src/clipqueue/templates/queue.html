@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Clips · ClipQueue{% endblock %}
+{% block content %}
+<div class="pagehead">
+  <div>
+    <h1>Your clips</h1>
+    <p class="muted small">{{ counts.all }} clips · {{ counts.queued }} scheduled · {{ counts.uploaded }} posted
+      {% if not connected %} · <a href="/settings#youtube">YouTube not connected</a>{% endif %}</p>
+  </div>
+  <div class="inline">
+    <form method="post" action="/rescan"><button class="btn ghost">Rescan folder</button></form>
+    <details class="pop">
+      <summary class="btn primary">Auto-schedule…</summary>
+      <form method="post" action="/queue/autofill" class="stack popbody">
+        <p class="small">Fill your next open posting slots with clips that haven't been scheduled. Clips without a title get an offline suggestion.</p>
+        <label>How many clips <input type="number" name="count" value="7" min="1" max="100"></label>
+        <label class="radio"><input type="checkbox" name="only_shorts"> Shorts only</label>
+        <button class="btn primary">Schedule them</button>
+      </form>
+    </details>
+  </div>
+</div>
+
+{% if scan.running %}
+<div id="scan-status" class="scan running" data-poll="1">
+  <div class="bar"><span style="width: {{ (100 * scan.done / scan.total) if scan.total else 0 }}%"></span></div>
+  <div class="small"><span class="scan-msg">{{ scan.message }}</span></div>
+</div>
+{% endif %}
+
+<div class="filters">
+  {% for key, label in filters %}
+  <a href="?status={{ key }}&kind={{ kind }}" class="{% if status == key %}active{% endif %}">{{ label }} <span class="count">{{ counts[key] }}</span></a>
+  {% endfor %}
+  <span class="sep"></span>
+  <a href="?status={{ status }}&kind=any" class="{% if kind == 'any' %}active{% endif %}">Any shape</a>
+  <a href="?status={{ status }}&kind=short" class="{% if kind == 'short' %}active{% endif %}">Shorts</a>
+  <a href="?status={{ status }}&kind=long" class="{% if kind == 'long' %}active{% endif %}">Long</a>
+</div>
+
+{% if not clips %}
+<div class="empty card">
+  {% if counts.all == 0 %}
+  <p>No clips yet. <a href="/settings#folder">Choose a clip folder</a> to get started.</p>
+  {% else %}
+  <p>Nothing here.</p>
+  {% endif %}
+</div>
+{% else %}
+<div class="grid">
+  {% for c in clips %}
+  <a class="tile" href="/clip/{{ c.id }}">
+    <div class="thumb {{ 'vertical' if is_short(c) else '' }}">
+      <img loading="lazy" src="/thumb/{{ c.id }}" alt="">
+      <span class="badge dur">{{ c.duration | dur }}</span>
+      {% if is_short(c) %}<span class="badge short">Short</span>{% endif %}
+    </div>
+    <div class="tile-body">
+      <div class="tile-title">{{ c.title or c.filename }}</div>
+      <div class="tile-meta">
+        <span class="status s-{{ c.status }}">{{ c.status }}</span>
+        {% if c.scheduled_at and c.status in ('queued', 'uploading', 'uploaded') %}<span class="muted small">{{ c.scheduled_at | when }}</span>{% endif %}
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

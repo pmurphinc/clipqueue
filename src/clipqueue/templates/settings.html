@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Settings · ClipQueue{% endblock %}
+{% block main_class %}narrow{% endblock %}
+{% block content %}
+<h1>Settings</h1>
+<nav class="toc small">
+  <a href="#folder">Clip folder</a> · <a href="#content">Your content</a> · <a href="#youtube">YouTube</a> · <a href="#schedule">Schedule</a> · <a href="#ai">AI</a>
+</nav>
+
+<section class="card" id="folder">
+  <h2>Clip folder</h2>
+  {% set back_url = "/settings" %}
+  {% include "_folder_form.html" %}
+</section>
+
+<section class="card" id="content">
+  <h2>Your content</h2>
+  {% set next_url = "/settings#content" %}{% set submit_label = "Save" %}{% set prev_step = None %}
+  {% include "_interview_form.html" %}
+</section>
+
+<section class="card" id="youtube">
+  <h2>YouTube</h2>
+  {% set back_url = "/settings" %}
+  {% include "_youtube_panel.html" %}
+</section>
+
+<section class="card" id="schedule">
+  <h2>Schedule</h2>
+  {% set next_url = "/settings#schedule" %}
+  {% include "_schedule_form.html" %}
+</section>
+
+<section class="card" id="ai">
+  <h2>AI suggestions</h2>
+  {% set next_url = "/settings#ai" %}
+  {% include "_ai_form.html" %}
+</section>
+
+<p class="muted small">Your data folder: <code>{{ data_dir }}</code></p>
+{% endblock %}

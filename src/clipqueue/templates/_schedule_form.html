@@ -1,0 +1,43 @@
+<form method="post" action="/setup/schedule" class="stack">
+  <input type="hidden" name="next" value="{{ next_url }}">
+  <fieldset>
+    <legend>Posting days</legend>
+    <div class="chips">
+      {% for d in weekdays %}
+      <label class="chip"><input type="checkbox" name="days" value="{{ loop.index0 }}" {% if loop.index0 in settings.schedule_days %}checked{% endif %}> {{ d }}</label>
+      {% endfor %}
+    </div>
+  </fieldset>
+  <label>Posting times <span class="muted small">(24-hour, comma-separated, your local time)</span>
+    <input name="times" value="{{ settings.schedule_times | join(', ') }}" placeholder="12:00, 18:00">
+  </label>
+  <div class="grid2">
+    <label>Max uploads per day
+      <input type="number" name="daily_upload_cap" min="1" max="50" value="{{ settings.daily_upload_cap }}">
+      <span class="muted small">YouTube's free API quota allows only a handful of uploads a day.</span>
+    </label>
+    <label>Upload up to this many hours early
+      <input type="number" name="upload_ahead_hours" min="1" max="240" value="{{ settings.upload_ahead_hours }}">
+      <span class="muted small">Clips upload ahead as private, and YouTube makes them public at the slot time, even if ClipQueue is closed.</span>
+    </label>
+  </div>
+  <fieldset>
+    <legend>When a clip uploads</legend>
+    <label class="radio"><input type="radio" name="publish_mode" value="schedule" {% if settings.publish_mode != 'private' %}checked{% endif %}> Make it public at its scheduled time</label>
+    <label class="radio"><input type="radio" name="publish_mode" value="private" {% if settings.publish_mode == 'private' %}checked{% endif %}> Keep it private. I'll publish it myself in YouTube Studio</label>
+  </fieldset>
+  <fieldset>
+    <legend>Is your content made for kids? <span class="muted small">(required by YouTube)</span></legend>
+    <label class="radio"><input type="radio" name="made_for_kids" value="no" {% if not settings.made_for_kids %}checked{% endif %}> No</label>
+    <label class="radio"><input type="radio" name="made_for_kids" value="yes" {% if settings.made_for_kids %}checked{% endif %}> Yes</label>
+  </fieldset>
+  <fieldset>
+    <legend>Auto-schedule picks</legend>
+    <label class="radio"><input type="radio" name="autofill_order" value="oldest" {% if settings.autofill_order != 'newest' %}checked{% endif %}> Oldest clips first</label>
+    <label class="radio"><input type="radio" name="autofill_order" value="newest" {% if settings.autofill_order == 'newest' %}checked{% endif %}> Newest clips first</label>
+  </fieldset>
+  <div class="actions">
+    {% if prev_step %}<a class="btn ghost" href="/setup/{{ prev_step }}">Back</a>{% endif %}
+    <button class="btn primary">{{ submit_label or 'Save and continue' }}</button>
+  </div>
+</form>
