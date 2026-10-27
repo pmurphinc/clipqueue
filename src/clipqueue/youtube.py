@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
-from .config import data_dir
+from .config import data_dir, write_secret
 
 # The OAuth redirect comes back to http://127.0.0.1, which oauthlib refuses
 # without this. It only affects this local process.
@@ -59,7 +59,7 @@ def validate_client_secret(raw: bytes) -> str | None:
 
 
 def save_client_secret(raw: bytes) -> None:
-    client_secret_path().write_bytes(raw)
+    write_secret(client_secret_path(), raw)
 
 
 def has_client_secret() -> bool:
@@ -91,7 +91,7 @@ def finish_auth(state: str, authorization_response: str) -> None:
     if flow is None:
         raise AuthError("Sign-in expired. Please try connecting again.")
     flow.fetch_token(authorization_response=authorization_response)
-    token_path().write_text(flow.credentials.to_json(), encoding="utf-8")
+    write_secret(token_path(), flow.credentials.to_json().encode("utf-8"))
 
 
 def disconnect() -> None:
@@ -119,7 +119,7 @@ def _credentials():
                 "YouTube sign-in expired. Please reconnect. (Google Cloud projects in "
                 "'Testing' mode expire sign-ins after 7 days; see the setup guide.)"
             ) from e
-        token_path().write_text(creds.to_json(), encoding="utf-8")
+        write_secret(token_path(), creds.to_json().encode("utf-8"))
     return creds
 
 

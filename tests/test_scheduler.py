@@ -33,3 +33,16 @@ def test_run_once_waits_without_youtube():
 
     db.init()
     assert "connected" in scheduler.run_once()
+
+
+def test_write_secret_is_owner_only(tmp_path):
+    import os
+    import stat
+
+    from clipqueue.config import write_secret
+
+    p = tmp_path / "token.json"
+    write_secret(p, b"{}")
+    assert p.read_bytes() == b"{}"
+    if os.name != "nt":
+        assert stat.S_IMODE(p.stat().st_mode) == 0o600

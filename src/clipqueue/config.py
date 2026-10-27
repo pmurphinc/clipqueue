@@ -33,9 +33,22 @@ DEFAULT_SETTINGS: dict[str, Any] = {
 
 def data_dir() -> Path:
     d = Path(os.environ.get("CLIPQUEUE_HOME") or Path.home() / ".clipqueue")
-    d.mkdir(parents=True, exist_ok=True)
+    d.mkdir(parents=True, exist_ok=True, mode=0o700)
+    if os.name != "nt":  # POSIX: keep the folder private to this user
+        os.chmod(d, 0o700)
     (d / "thumbs").mkdir(exist_ok=True)
     return d
+
+
+def write_secret(path: Path, data: bytes) -> None:
+    """Write a credential file readable only by the current user (0600 on POSIX)."""
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "wb") as f:
+        f.write(data)
+    if os.name != "nt":
+        os.chmod(tmp, 0o600)  # in case the file already existed with wider permissions
+    os.replace(tmp, path)
 
 
 def read_json(path: Path, default: dict[str, Any]) -> dict[str, Any]:
