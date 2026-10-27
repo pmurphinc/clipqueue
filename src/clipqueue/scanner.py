@@ -113,7 +113,7 @@ def _scan(folder: str) -> dict[str, int]:
     seen = set()
     root = Path(folder)
     for i, p in enumerate(videos, 1):
-        path = str(p.resolve())
+        path = str(p.absolute())
         seen.add(path)
         try:
             st = p.stat()
@@ -131,7 +131,7 @@ def _scan(folder: str) -> dict[str, int]:
         else:
             added += 1
         scan_state["done"] = i
-    root_str = str(root.resolve())
+    root_str = str(root.absolute())
     missing = [k for k in known if k.startswith(root_str) and k not in seen]
     db.mark_missing(missing)
     result = {"found": len(videos), "added": added, "updated": updated, "missing": len(missing)}

@@ -15,6 +15,20 @@ Turn a folder of old video clips into a YouTube posting schedule. ClipQueue runs
 3. **Suggests titles, descriptions, hashtags and tags** in that style. It works offline, and can optionally use your local [Claude Code](https://claude.com/claude-code) CLI with your own plan.
 4. **Schedules uploads.** Clips upload a few hours or days ahead as private with a publish time, so YouTube makes them public on schedule even if ClipQueue is closed by then.
 
+## Screenshots
+
+**Clips:** your whole library at a glance, with Shorts flagged, scheduled times and one-click auto-scheduling.
+
+![Clips tab](docs/screenshots/clips.png)
+
+**Schedule:** what's coming up, what's uploading and what's been posted.
+
+![Schedule tab](docs/screenshots/schedule.png)
+
+**Settings:** clip folder, your content profile, YouTube connection, posting schedule and AI options.
+
+![Settings tab](docs/screenshots/settings.png)
+
 ## Before you start
 
 **Setup takes about 20–30 minutes:**

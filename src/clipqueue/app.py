@@ -208,8 +208,10 @@ async def setup_folder(request: Request):
     back = str(form.get("back", "/setup/folder"))
     if not folder or not os.path.isdir(folder):
         return go(back, err=f"Folder not found: {folder or '(empty)'}")
-    update_settings(clip_folder=str(Path(folder).resolve()))
-    scanner.scan_in_background(str(Path(folder).resolve()))
+    # abspath, not resolve(): keep mapped/network drive letters as the user typed them.
+    folder = os.path.abspath(folder)
+    update_settings(clip_folder=folder)
+    scanner.scan_in_background(folder)
     return go(back, msg="Scanning your folder...")
 
 

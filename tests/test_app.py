@@ -62,7 +62,7 @@ def test_full_flow_scan_suggest_schedule(client, tmp_path):
                     data={"folder": str(tmp_path / "My Clips"), "back": "/setup/folder"},
                     follow_redirects=False)
     assert r.status_code == 303
-    scanner.scan(str((tmp_path / "My Clips").resolve()))  # wait for a full scan
+    scanner.scan(str((tmp_path / "My Clips").absolute()))  # wait for a full scan
     all_clips = db.list_clips()
     assert len(all_clips) == 2
     short = next(c for c in all_clips if "ace" in c["filename"])
