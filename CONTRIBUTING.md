@@ -5,7 +5,7 @@ Thanks for helping out. ClipQueue is meant to stay small and easy to run.
 ## Setup
 
 ```bash
-git clone https://github.com/OWNER/clipqueue.git
+git clone https://github.com/pmurphinc/clipqueue.git
 cd clipqueue
 python -m venv .venv
 # Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate

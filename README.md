@@ -20,14 +20,14 @@ Turn a folder of old video clips into a YouTube posting schedule. ClipQueue runs
 You need **Python 3.11+**. **ffmpeg** is strongly recommended, for clip length, shape and thumbnails.
 
 ```bash
-pip install git+https://github.com/OWNER/clipqueue.git
+pip install git+https://github.com/pmurphinc/clipqueue.git
 clipqueue
 ```
 
 Or from a clone:
 
 ```bash
-git clone https://github.com/OWNER/clipqueue.git
+git clone https://github.com/pmurphinc/clipqueue.git
 cd clipqueue
 python -m venv .venv
 # Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
